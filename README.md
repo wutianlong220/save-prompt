@@ -14,7 +14,7 @@
 npm start          # 或 node server.js
 ```
 
-浏览器打开 `http://localhost:4321`（端口在 config.json 里改）。
+浏览器打开 `http://localhost:5988`（端口在 config.json 里改）。
 
 要求 Node ≥ 18，无任何 npm 依赖。
 
@@ -28,7 +28,7 @@ cp config.example.json config.json
 
 ```json
 {
-  "port": 4321,
+  "port": 5988,
   "llm": {
     "protocol": "anthropic",
     "base_url": "https://api.minimaxi.com/anthropic",

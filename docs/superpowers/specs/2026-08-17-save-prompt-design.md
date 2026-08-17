@@ -77,7 +77,7 @@ save-prompt/
 
 ```json
 {
-  "port": 4321,
+  "port": 5988,
   "llm": {
     "protocol": "anthropic",
     "base_url": "https://api.minimaxi.com/anthropic",

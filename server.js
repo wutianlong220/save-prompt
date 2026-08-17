@@ -23,7 +23,7 @@ function loadConfig() {
   try {
     return JSON.parse(fs.readFileSync(CONFIG_FILE, 'utf8'));
   } catch {
-    return { port: 4321, llm: null };
+    return { port: 5988, llm: null };
   }
 }
 
@@ -152,7 +152,7 @@ const server = http.createServer(async (req, res) => {
   }
 });
 
-const port = loadConfig().port || 4321;
+const port = loadConfig().port || 5988;
 server.listen(port, '127.0.0.1', () => {
   console.log('提示词武器库已启动：http://localhost:' + port);
 });

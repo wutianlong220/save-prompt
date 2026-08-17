@@ -1,0 +1,11 @@
+# 敏感配置：LLM api_key 在这里，绝不提交
+config.json
+
+# 工具目录
+node_modules/
+.superpowers/
+
+# 系统与日志
+.DS_Store
+*.log
+data/prompts.json.tmp

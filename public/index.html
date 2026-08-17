@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>save-prompt · 提示词武器库</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; background:#0d1117; color:#e6edf3; height:100vh; display:flex; flex-direction:column; overflow:hidden; }
+  header { padding:10px 16px; background:#161b22; border-bottom:1px solid #30363d; font-weight:600; display:flex; justify-content:space-between; align-items:center; flex-shrink:0; }
+  #save-state { font-size:11px; color:#8b949e; border:1px solid #30363d; padding:2px 8px; border-radius:10px; font-weight:400; }
+  #save-state.saving { color:#e3b341; border-color:#e3b34166; }
+  #save-state.saved { color:#3fb950; border-color:#3fb95066; }
+  #save-state.error { color:#f85149; border-color:#f8514966; }
+  .app { flex:1; display:flex; overflow:hidden; }
+
+  /* 左栏：场景树 */
+  aside { width:330px; border-right:1px solid #30363d; overflow-y:auto; padding:12px; flex-shrink:0; }
+  .aside-title { font-size:12px; color:#8b949e; text-transform:uppercase; letter-spacing:1px; margin-bottom:10px; }
+  .sc-head { display:flex; align-items:center; gap:6px; padding:7px 8px; border-radius:6px; cursor:pointer; font-weight:600; font-size:14px; user-select:none; }
+  .sc-head:hover { background:#161b22; }
+  .sc-acts { display:none; gap:2px; margin-left:auto; }
+  .sc-head:hover .sc-acts { display:flex; }
+  .sc-head:hover .badge { display:none; }
+  .sc-acts span { font-size:12px; padding:1px 5px; border-radius:4px; color:#8b949e; }
+  .sc-acts span:hover { background:#30363d; color:#e6edf3; }
+  .badge { font-size:11px; font-weight:400; padding:1px 7px; border-radius:8px; margin-left:auto; }
+  .badge.flow { color:#58a6ff; background:rgba(88,166,255,.12); }
+  .badge.set { color:#e3b341; background:rgba(227,179,65,.12); }
+  .item { display:flex; align-items:center; gap:6px; padding:5px 8px 5px 14px; border-radius:6px; color:#a9b1ba; font-size:13px; cursor:pointer; }
+  .item:hover { background:#161b22; color:#e6edf3; }
+  .item.active { background:#1f6feb; color:#fff; }
+  .handle { cursor:grab; color:#62707d; font-size:13px; }
+  .item.active .handle { color:rgba(255,255,255,.6); }
+  .num { background:#21262d; border-radius:4px; font-size:11px; padding:0 6px; color:#58a6ff; flex-shrink:0; }
+  .item.active .num { background:rgba(255,255,255,.2); color:#fff; }
+  .dot { width:20px; text-align:center; color:#62707d; flex-shrink:0; }
+  .item.drag-over { border-top:2px solid #1f6feb; margin-top:-2px; }
+  .add-item { color:#62707d; border:1px dashed #30363d; padding:4px; text-align:center; border-radius:6px; margin:6px 0 4px 14px; font-size:12px; cursor:pointer; }
+  .add-item:hover { color:#58a6ff; border-color:#1f6feb; }
+  .add-sc { color:#62707d; border:1px dashed #30363d; padding:6px; text-align:center; border-radius:6px; margin-top:12px; font-size:13px; cursor:pointer; }
+  .add-sc:hover { color:#58a6ff; border-color:#1f6feb; }
+  .scenario { margin-bottom:6px; }
+
+  /* 右栏：详情 */
+  section.detail { flex:1; overflow-y:auto; padding:28px 36px; }
+  .d-path { font-size:12px; color:#8b949e; margin-bottom:4px; }
+  .d-title { font-size:22px; font-weight:700; margin-bottom:6px; }
+  .d-desc { color:#a9b1ba; font-size:14px; margin-bottom:14px; max-width:640px; }
+  .btns { display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap; }
+  .btn { border:1px solid #30363d; background:#21262d; color:#e6edf3; padding:5px 14px; border-radius:6px; font-size:13px; cursor:pointer; }
+  .btn:hover { border-color:#8b949e; }
+  .btn:disabled { opacity:.5; cursor:default; }
+  .btn.primary { background:#1f6feb; border-color:#1f6feb; }
+  .btn.primary:hover { background:#388bfd; }
+  .btn.danger { color:#f85149; border-color:rgba(248,81,73,.4); background:transparent; }
+  .btn.danger:hover { background:rgba(248,81,73,.1); }
+  .d-body { background:#010409; border:1px solid #30363d; border-radius:8px; padding:16px; font-family:ui-monospace,SFMono-Regular,monospace; font-size:13px; line-height:1.8; color:#a5d6ff; white-space:pre-wrap; max-width:760px; }
+  .d-meta { color:#62707d; font-size:12px; margin-top:10px; }
+  .placeholder { color:#4d5860; display:flex; align-items:center; justify-content:center; height:100%; font-size:14px; }
+
+  /* 模态框 */
+  .overlay { position:fixed; inset:0; background:rgba(1,4,9,.7); display:none; align-items:center; justify-content:center; z-index:10; }
+  .overlay.show { display:flex; }
+  .modal { background:#161b22; border:1px solid #30363d; border-radius:10px; padding:20px; width:520px; max-width:92vw; max-height:88vh; overflow-y:auto; }
+  .modal h3 { margin-bottom:14px; font-size:16px; }
+  .modal label { display:block; font-size:12px; color:#8b949e; margin:10px 0 4px; }
+  .modal input[type=text], .modal textarea { width:100%; background:#0d1117; border:1px solid #30363d; border-radius:6px; color:#e6edf3; padding:7px 10px; font-size:13px; }
+  .modal textarea { min-height:140px; font-family:ui-monospace,monospace; resize:vertical; }
+  .radio-row { display:flex; gap:14px; margin-top:6px; }
+  .radio-row label { display:flex; align-items:center; gap:5px; margin:0; color:#e6edf3; font-size:13px; cursor:pointer; }
+  .modal .btns { margin-top:16px; justify-content:flex-end; }
+</style>
+</head>
+<body>
+<header>
+  <div>📚 save-prompt · 提示词武器库</div>
+  <div id="save-state">加载中…</div>
+</header>
+<div class="app">
+  <aside>
+    <div class="aside-title">场景库</div>
+    <div id="tree"></div>
+  </aside>
+  <section class="detail" id="detail"></section>
+</div>
+
+<div class="overlay" id="overlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal" id="modal"></div>
+</div>
+
+<script>
+// ===== 状态 =====
+let state = null;                       // { version, scenarios:[...] }
+let sel = null;                         // { sid, iid } 当前选中
+let drag = null;                        // 拖拽中的 { sid, iid }
+let saveTimer = null;
+
+const $ = id => document.getElementById(id);
+const findSc = sid => state.scenarios.find(s => s.id === sid);
+const newId = pre => pre + '_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+const nowISO = () => new Date().toISOString();
+const esc = s => String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+// ===== 自动保存（防抖，剥离纯 UI 状态）=====
+function scheduleSave() {
+  $('save-state').textContent = '保存中…';
+  $('save-state').className = 'saving';
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(async () => {
+    try {
+      const payload = { version: state.version || 1, scenarios: state.scenarios.map(sc => ({ ...sc, expanded: undefined })) };
+      const r = await fetch('/api/data', { method: 'PUT', headers: { 'content-type': 'application/json' }, body: JSON.stringify(payload) });
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      $('save-state').textContent = '已保存 ✓';
+      $('save-state').className = 'saved';
+    } catch (e) {
+      $('save-state').textContent = '保存失败！';
+      $('save-state').className = 'error';
+    }
+  }, 500);
+}
+
+// ===== 左栏渲染 =====
+function renderSidebar() {
+  const tree = $('tree'); tree.innerHTML = '';
+  state.scenarios.forEach(sc => {
+    const box = document.createElement('div'); box.className = 'scenario';
+
+    const head = document.createElement('div'); head.className = 'sc-head';
+    head.innerHTML =
+      `<span class="arrow" style="font-size:10px;color:#8b949e;width:12px">${sc.expanded ? '▼' : '▶'}</span>` +
+      `<span>${esc(sc.name)}</span>` +
+      `<span class="badge ${sc.type}">${sc.type === 'flow' ? sc.items.length + ' 步' : sc.items.length + ' 条'}</span>` +
+      `<span class="sc-acts"><span title="编辑场景" onclick="event.stopPropagation();openScenarioModal('${sc.id}')">✎</span>` +
+      `<span title="删除场景" onclick="event.stopPropagation();delScenario('${sc.id}')">🗑</span></span>`;
+    head.onclick = () => { sc.expanded = !sc.expanded; renderSidebar(); };  // 折叠是纯 UI 状态，不触发保存
+    box.appendChild(head);
+
+    if (sc.expanded) {
+      sc.items.forEach((it, i) => {
+        const row = document.createElement('div');
+        row.className = 'item' + (sel && sel.sid === sc.id && sel.iid === it.id ? ' active' : '');
+        row.draggable = true;
+        row.innerHTML =
+          (sc.type === 'flow' ? `<span class="num">${i + 1}</span>` : '<span class="dot">·</span>') +
+          `<span class="handle" title="拖拽调整顺序（也可以拖到别的场景）">⠿</span><span>${esc(it.title)}</span>`;
+        row.onclick = () => { sel = { sid: sc.id, iid: it.id }; renderSidebar(); renderDetail(); };
+        row.ondragstart = e => { drag = { sid: sc.id, iid: it.id }; e.dataTransfer.effectAllowed = 'move'; };
+        row.ondragend = () => { drag = null; };
+        row.ondragover = e => { e.preventDefault(); row.classList.add('drag-over'); };
+        row.ondragleave = () => row.classList.remove('drag-over');
+        row.ondrop = e => { e.preventDefault(); row.classList.remove('drag-over'); handleDrop(sc.id, it.id); };
+        box.appendChild(row);
+      });
+      const add = document.createElement('div'); add.className = 'add-item'; add.textContent = '+ 添加提示词';
+      add.onclick = () => openPromptModal(sc.id, null);
+      box.appendChild(add);
+    }
+    tree.appendChild(box);
+  });
+  const addSc = document.createElement('div'); addSc.className = 'add-sc'; addSc.textContent = '+ 新建场景';
+  addSc.onclick = () => openScenarioModal(null);
+  tree.appendChild(addSc);
+}
+
+// 拖拽落点：把拖拽条目移到目标条目之前（支持跨场景）
+function handleDrop(targetSid, targetIid) {
+  if (!drag) return;
+  const fromSc = findSc(drag.sid), toSc = findSc(targetSid);
+  const from = fromSc.items.findIndex(i => i.id === drag.iid);
+  const item = fromSc.items.splice(from, 1)[0];
+  let to = toSc.items.findIndex(i => i.id === targetIid);
+  if (fromSc === toSc && from < to) to -= 1;
+  toSc.items.splice(to, 0, item);
+  sel = { sid: toSc.id, iid: item.id };
+  drag = null;
+  renderSidebar(); renderDetail(); scheduleSave();
+}
+
+// ===== 右栏渲染 =====
+function renderDetail() {
+  const el = $('detail');
+  const sc = sel && findSc(sel.sid);
+  const it = sc && sc.items.find(i => i.id === sel.iid);
+  if (!it) { el.innerHTML = '<div class="placeholder">左侧选择一个提示词查看详情</div>'; return; }
+  const idx = sc.items.findIndex(i => i.id === it.id);
+  const stepInfo = sc.type === 'flow'
+    ? `${sc.name} · 第 ${idx + 1} 步 / 共 ${sc.items.length} 步`
+    : `${sc.name} · 集合`;
+  el.innerHTML =
+    `<div class="d-path">${esc(stepInfo)}</div>` +
+    `<div class="d-title">${sc.type === 'flow' ? String(idx + 1).padStart(2, '0') + ' · ' : ''}${esc(it.title)}</div>` +
+    `<div class="d-desc">${esc(it.desc) || '<span style="color:#4d5860">（无简介，编辑时可点「✨ AI 生成」）</span>'}</div>` +
+    `<div class="btns">` +
+    `<button class="btn primary" onclick="copyBody()">📋 复制</button>` +
+    `<button class="btn" onclick="openPromptModal('${sc.id}','${it.id}')">✏️ 编辑</button>` +
+    `<button class="btn danger" onclick="delItem('${sc.id}','${it.id}')">🗑 删除</button></div>` +
+    `<div class="d-body">${esc(it.body)}</div>` +
+    (it.source ? `<div class="d-meta">来源：${esc(it.source)} · 存于 ${(it.createdAt || '').slice(0, 10)}</div>`
+               : `<div class="d-meta">存于 ${(it.createdAt || '').slice(0, 10)}</div>`);
+}
+
+function copyBody() {
+  const sc = findSc(sel.sid), it = sc.items.find(i => i.id === sel.iid);
+  navigator.clipboard.writeText(it.body).then(() => {
+    const b = document.querySelector('.btn.primary');
+    const old = b.textContent;
+    b.textContent = '✅ 已复制';
+    setTimeout(() => b.textContent = old, 1200);
+  });
+}
+
+function delItem(sid, iid) {
+  const sc = findSc(sid);
+  const it = sc.items.find(i => i.id === iid);
+  if (!confirm(`确定删除「${it.title}」吗？`)) return;
+  sc.items = sc.items.filter(i => i.id !== iid);
+  if (sel && sel.iid === iid) sel = { sid, iid: sc.items[0] ? sc.items[0].id : null };
+  renderSidebar(); renderDetail(); scheduleSave();
+}
+
+function delScenario(sid) {
+  const sc = findSc(sid);
+  if (!confirm(`确定删除场景「${sc.name}」吗？旗下 ${sc.items.length} 条提示词会一并删除！`)) return;
+  state.scenarios = state.scenarios.filter(s => s.id !== sid);
+  if (sel && sel.sid === sid) sel = null;
+  renderSidebar(); renderDetail(); scheduleSave();
+}
+
+// ===== 模态框 =====
+function closeModal() { $('overlay').classList.remove('show'); }
+
+function openScenarioModal(sid) {
+  const sc = sid ? findSc(sid) : null;
+  $('modal').innerHTML =
+    `<h3>${sc ? '编辑场景' : '新建场景'}</h3>` +
+    `<label>场景名称</label><input type="text" id="m-name" value="${sc ? esc(sc.name) : ''}" placeholder="例如：🎬 做视频脚本">` +
+    `<label>场景类型（随时可切换）</label>` +
+    `<div class="radio-row">` +
+    `<label><input type="radio" name="m-type" value="flow" ${!sc || sc.type === 'flow' ? 'checked' : ''}> 流程型（有先后顺序）</label>` +
+    `<label><input type="radio" name="m-type" value="set" ${sc && sc.type === 'set' ? 'checked' : ''}> 集合型（无顺序）</label></div>` +
+    `<div class="btns"><button class="btn" onclick="closeModal()">取消</button>` +
+    `<button class="btn primary" onclick="saveScenario(${sc ? `'${sc.id}'` : 'null'})">${sc ? '保存' : '创建'}</button></div>`;
+  $('overlay').classList.add('show');
+}
+function saveScenario(sid) {
+  const name = $('m-name').value.trim();
+  if (!name) return alert('请填写场景名称');
+  const type = document.querySelector('input[name=m-type]:checked').value;
+  if (sid) {
+    const sc = findSc(sid);
+    sc.name = name; sc.type = type;
+  } else {
+    state.scenarios.push({ id: newId('sc'), name, type, createdAt: nowISO(), expanded: true, items: [] });
+  }
+  closeModal(); renderSidebar(); scheduleSave();
+}
+
+function openPromptModal(sid, iid) {
+  const sc = findSc(sid);
+  const it = iid ? sc.items.find(i => i.id === iid) : null;
+  $('modal').innerHTML =
+    `<h3>${it ? '编辑提示词' : '添加提示词'} · ${esc(sc.name)}</h3>` +
+    `<label>标题</label><input type="text" id="m-title" value="${it ? esc(it.title) : ''}" placeholder="例如：需求梳理">` +
+    `<div style="display:flex;justify-content:space-between;align-items:center">` +
+    `<label>简介（这货是干嘛的）</label>` +
+    `<button type="button" class="btn" style="padding:2px 10px;font-size:12px" onclick="aiGenDesc(this)">✨ AI 生成</button></div>` +
+    `<input type="text" id="m-desc" value="${it ? esc(it.desc) : ''}" placeholder="点右上「AI 生成」，或自己写一句">` +
+    `<label>提示词正文（支持 {{变量}} 占位符）</label><textarea id="m-body">${it ? esc(it.body) : ''}</textarea>` +
+    `<label>来源（可选）</label><input type="text" id="m-src" value="${it ? esc(it.source) : ''}" placeholder="https://...">` +
+    `<div class="btns"><button class="btn" onclick="closeModal()">取消</button>` +
+    `<button class="btn primary" onclick="savePrompt('${sid}',${it ? `'${iid}'` : 'null'})">保存</button></div>`;
+  $('overlay').classList.add('show');
+}
+function savePrompt(sid, iid) {
+  const sc = findSc(sid);
+  const title = $('m-title').value.trim(), desc = $('m-desc').value.trim(),
+        body = $('m-body').value.trim(), src = $('m-src').value.trim();
+  if (!title || !body) return alert('标题和正文必填');
+  if (iid) {
+    const it = sc.items.find(i => i.id === iid);
+    Object.assign(it, { title, desc, body, source: src, updatedAt: nowISO() });
+  } else {
+    const nid = newId('p');
+    sc.items.push({ id: nid, title, desc, body, source: src, createdAt: nowISO(), updatedAt: nowISO() });
+    sel = { sid, iid: nid };
+    sc.expanded = true;
+  }
+  closeModal(); renderSidebar(); renderDetail(); scheduleSave();
+}
+
+// ===== AI 生成简介（后端转发 LLM）=====
+async function aiGenDesc(btn) {
+  const body = $('m-body').value.trim();
+  if (!body) return alert('先填写提示词正文，AI 才能读着写简介');
+  btn.disabled = true;
+  const old = btn.textContent;
+  btn.textContent = '⏳ 生成中…';
+  try {
+    const r = await fetch('/api/ai/summarize', {
+      method: 'POST', headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ body })
+    });
+    const j = await r.json();
+    if (!r.ok) throw new Error(j.error || ('HTTP ' + r.status));
+    $('m-desc').value = j.desc;
+  } catch (e) {
+    alert('AI 生成失败：' + e.message + '\n（可手动填写简介，不影响保存）');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = old;
+  }
+}
+
+// ===== 启动 =====
+(async function init() {
+  try {
+    const r = await fetch('/api/data');
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    state = await r.json();
+    state.scenarios.forEach(sc => { sc.expanded = false; });
+    const first = state.scenarios[0];
+    if (first && first.items[0]) { first.expanded = true; sel = { sid: first.id, iid: first.items[0].id }; }
+    $('save-state').textContent = '已就绪';
+    $('save-state').className = 'saved';
+    renderSidebar(); renderDetail();
+  } catch (e) {
+    $('save-state').textContent = '加载失败';
+    $('save-state').className = 'error';
+    $('detail').innerHTML = `<div class="placeholder">数据加载失败：${esc(e.message)}</div>`;
+  }
+})();
+</script>
+</body>
+</html>

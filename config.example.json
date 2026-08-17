@@ -1,0 +1,9 @@
+{
+  "port": 4321,
+  "llm": {
+    "protocol": "anthropic",
+    "base_url": "https://api.minimaxi.com/anthropic",
+    "api_key": "在这里填入你的 api_key（此文件是模板，真实 key 放在 config.json，不进 git）",
+    "model": "MiniMax-M3"
+  }
+}

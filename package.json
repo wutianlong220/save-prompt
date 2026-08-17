@@ -1,0 +1,12 @@
+{
+  "name": "save-prompt",
+  "version": "0.1.0",
+  "private": true,
+  "description": "提示词武器库：按场景分类管理配套提示词的本地 Web 应用",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

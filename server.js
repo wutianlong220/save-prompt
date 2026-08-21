@@ -74,8 +74,9 @@ async function aiSummarize(text) {
   }
   const clipped = text.length > 4000 ? text.slice(0, 4000) + '…' : text;
   const prompt =
-    '你是提示词管理助手。阅读下面的提示词，用不超过 30 个汉字概括它的用途和使用时机，' +
-    '直接输出这一句话，不要加引号、前缀或任何解释。\n\n<提示词>\n' + clipped + '\n</提示词>';
+    '你是提示词管理助手。阅读下面的提示词，写一段不超过 140 个字符（1 个汉字算 1 个字符）的简介，' +
+    '目标是接近 140 字但不超过。内容要覆盖三件事：1. 这条提示词是干什么的；2. 什么时候/什么场景下用它；3. 有什么使用注意事项。' +
+    '直接输出这段简介，不要加引号、前缀、序号或任何解释。\n\n<提示词>\n' + clipped + '\n</提示词>';
   const base = String(cfg.base_url || '').replace(/\/+$/, '');
   const protocol = cfg.protocol || 'openai';
 

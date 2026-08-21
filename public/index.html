@@ -322,15 +322,33 @@ function openPromptModal(sid, iid) {
     `<h3>${it ? '编辑提示词' : '添加提示词'} · ${esc(sc.name)}</h3>` +
     `<label>标题</label><input type="text" id="m-title" value="${it ? esc(it.title) : ''}" placeholder="例如：需求梳理">` +
     `<div style="display:flex;justify-content:space-between;align-items:center">` +
-    `<label>简介（这货是干嘛的）</label>` +
+    `<label>简介（这货是干嘛的，140 字内）</label>` +
+    `<span id="m-desc-count" style="font-size:11px;color:var(--weak)"></span>` +
     `<button type="button" class="btn" style="padding:2px 10px;font-size:12px" onclick="aiGenDesc(this)">✨ AI 生成</button></div>` +
-    `<input type="text" id="m-desc" value="${it ? esc(it.desc) : ''}" placeholder="点右上「AI 生成」，或自己写一句">` +
+    `<textarea id="m-desc" rows="3" placeholder="点右上「AI 生成」，或自己写一段。说明这货是干嘛的、什么时候用、有什么注意点">${it ? esc(it.desc || '') : ''}</textarea>` +
     `<label>提示词正文（支持 {{变量}} 占位符）</label><textarea id="m-body">${it ? esc(it.body) : ''}</textarea>` +
     `<label>来源（可选）</label><input type="text" id="m-src" value="${it ? esc(it.source) : ''}" placeholder="https://...">` +
     `<div class="btns"><button class="btn" onclick="closeModal()">取消</button>` +
     `<button class="btn primary" onclick="savePrompt('${sid}',${it ? `'${iid}'` : 'null'})">保存</button></div>`;
   $('overlay').classList.add('show');
   $('m-body').addEventListener('paste', normalizePaste);
+  // 简介字数实时提示（>140 时变红，不阻止保存）
+  const descEl = $('m-desc');
+  const updateCount = () => {
+    const n = descEl.value.length;
+    const counter = $('m-desc-count');
+    if (n > 140) {
+      counter.textContent = `${n} / 140（超出 ${n - 140} 字，建议精简）`;
+      counter.style.color = 'var(--red)';
+    } else if (n > 0) {
+      counter.textContent = `${n} / 140`;
+      counter.style.color = 'var(--weak)';
+    } else {
+      counter.textContent = '';
+    }
+  };
+  descEl.addEventListener('input', updateCount);
+  updateCount();
 }
 
 // 接管 paste：修复"换行被吞"，同时保证"原本正常的格式不被破坏"

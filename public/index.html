@@ -231,9 +231,13 @@ function renderDetail() {
   const stepInfo = sc.type === 'flow'
     ? `${sc.name} · 第 ${idx + 1} 步 / 共 ${sc.items.length} 步`
     : `${sc.name} · 集合`;
+  const copyCount = it.copyCount || 0;
+  const copyBadge = copyCount > 0
+    ? `<span style="font-size:12px;color:var(--weak);font-weight:400;margin-left:10px;padding:2px 8px;background:var(--chip);border-radius:10px">已复制 ${copyCount} 次</span>`
+    : '';
   el.innerHTML =
     `<div class="d-path">${esc(stepInfo)}</div>` +
-    `<div class="d-title">${sc.type === 'flow' ? String(idx + 1).padStart(2, '0') + ' · ' : ''}${esc(it.title)}</div>` +
+    `<div class="d-title">${sc.type === 'flow' ? String(idx + 1).padStart(2, '0') + ' · ' : ''}${esc(it.title)}${copyBadge}</div>` +
     `<div class="d-desc">${esc(it.desc) || '<span style="color:#4d5860">（无简介，编辑时可点「✨ AI 生成」）</span>'}</div>` +
     `<div class="btns">` +
     `<button class="btn primary" onclick="copyBody()">📋 复制</button>` +
@@ -244,9 +248,20 @@ function renderDetail() {
                : `<div class="d-meta">存于 ${(it.createdAt || '').slice(0, 10)}</div>`);
 }
 
+// 全局：上次成功复制的时间戳（用于 5s 防抖）
+let lastCopyAt = { id: null, ts: 0 };
+
 function copyBody() {
   const sc = findSc(sel.sid), it = sc.items.find(i => i.id === sel.iid);
   navigator.clipboard.writeText(it.body).then(() => {
+    // 5 秒内同一条不重复计数
+    const now = Date.now();
+    if (lastCopyAt.id !== it.id || now - lastCopyAt.ts >= 5000) {
+      it.copyCount = (it.copyCount || 0) + 1;
+      lastCopyAt = { id: it.id, ts: now };
+      scheduleSave();
+      renderDetail();  // 刷新右栏让计数立刻可见
+    }
     const b = document.querySelector('.btn.primary');
     const old = b.textContent;
     b.textContent = '✅ 已复制';
@@ -315,6 +330,71 @@ function openPromptModal(sid, iid) {
     `<div class="btns"><button class="btn" onclick="closeModal()">取消</button>` +
     `<button class="btn primary" onclick="savePrompt('${sid}',${it ? `'${iid}'` : 'null'})">保存</button></div>`;
   $('overlay').classList.add('show');
+  $('m-body').addEventListener('paste', normalizePaste);
+}
+
+// 接管 paste：修复"换行被吞"，同时保证"原本正常的格式不被破坏"
+// 策略：信任剪贴板的 plain 文本（最干净，VSCode 等都是好的），
+//       仅在 plain 没换行但 HTML 有段落结构时，回退到 HTML
+// 始终接管 paste：用 HTML 算段落分隔（微信 / ChatGPT / Notion 等都能正确还原）
+// VSCode 复制带语法高亮 HTML 会被破坏，但概率极低，优先解决网页复制问题
+function normalizePaste(e) {
+  const cd = e.clipboardData;
+  if (!cd) return;
+  const html = cd.getData('text/html') || '';
+  const plain = cd.getData('text/plain') || '';
+
+  let text;
+  if (html) {
+    text = htmlToText(html);
+  } else if (plain) {
+    // 只有 plain 时（如记事本复制）：信任 plain
+    text = plain.replace(/\r\n?/g, '\n');
+  } else {
+    return;
+  }
+
+  if (!text) return;
+  // 收尾清理
+  text = text.replace(/^\s+|\s+$/g, '').replace(/\n{4,}/g, '\n\n\n');
+  if (!text) return;
+
+  e.preventDefault();
+  const ta = e.target;
+  const start = ta.selectionStart, end = ta.selectionEnd;
+  ta.value = ta.value.slice(0, start) + text + ta.value.slice(end);
+  const pos = start + text.length;
+  ta.selectionStart = ta.selectionEnd = pos;
+}
+
+// HTML → 纯文本：识别块级边界作为段落分隔，去除样式/属性
+function htmlToText(html) {
+  // 1. 用占位符标记块级边界（避免被后续处理吃掉）
+  const BOUND = '\u0001O\u0001';
+
+  let s = html
+    .replace(/\r\n?/g, '\n')
+    // <br> 直接换行
+    .replace(/<\s*br\s*\/?>/gi, '\n')
+    // 块级开/闭标签 → 都标记成同一个占位符（每个块级标签代表一个段落边界）
+    .replace(/<\s*\/?\s*(p|div|li|h[1-6]|tr|section|article|blockquote|pre|code)[^>]*>/gi, BOUND)
+    // 关键：去掉"标签之间"的空白/换行（源码缩进的干扰）
+    .replace(/>\s+</g, '><')
+    // 去掉所有剩余标签
+    .replace(/<[^>]+>/g, '')
+    // 合并相邻的占位符（多个连续块级标签 = 一个段落边界）
+    .replace(new RegExp('(' + BOUND + ')+', 'g'), BOUND)
+    // 把占位符还原成段落分隔
+    .replace(new RegExp(BOUND, 'g'), '\n\n')
+    // HTML 实体
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'");
+
+  return s;
 }
 function savePrompt(sid, iid) {
   const sc = findSc(sid);

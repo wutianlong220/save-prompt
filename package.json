@@ -2,9 +2,10 @@
   "name": "save-prompt",
   "version": "0.1.0",
   "private": true,
-  "description": "提示词武器库：按场景分类管理配套提示词的本地 Web 应用",
+  "description": "提示词武器库：按场景分类管理配套提示词。本地可写，线上只读",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "build": "echo '静态站点，无需构建'"
   },
   "engines": {
     "node": ">=18"

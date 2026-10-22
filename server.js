@@ -1,13 +1,19 @@
 // save-prompt 本地服务：零依赖 Node 后端
-// 职责：托管 public/ 静态页面、读写 data/prompts.json（原子落盘）、转发 LLM 生成简介
+// 职责：托管 public/ 静态页面、读写 public/prompts.json（原子落盘）、转发 LLM 生成简介
+//
+// 这个进程只在本地跑（监听 127.0.0.1），也是唯一能写入数据的地方。
+// 线上是 Vercel 上的纯静态托管，只发布 public/ 目录，根本不部署这个文件——
+// 所以公网上不存在任何写入入口，「只有我能改」不是靠鉴权，而是靠没有那个接口。
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
 
 const ROOT = __dirname;
-const DATA_FILE = path.join(ROOT, 'data', 'prompts.json');
-const CONFIG_FILE = path.join(ROOT, 'config.json');
 const PUBLIC_DIR = path.join(ROOT, 'public');
+// 数据与前端同放 public/：线上是纯静态托管，只发布这个目录，所以数据必须在这里。
+// 本地 server 也读写同一份，两边永不产生两份数据。
+const DATA_FILE = path.join(PUBLIC_DIR, 'prompts.json');
+const CONFIG_FILE = path.join(ROOT, 'config.json');
 
 const MIME = {
   '.html': 'text/html; charset=utf-8',
@@ -122,6 +128,11 @@ function serveStatic(req, res, urlPath) {
 const server = http.createServer(async (req, res) => {
   const urlPath = (req.url || '/').split('?')[0];
   try {
+    // 只读标志：能问到这个端点，就说明背后有后端，页面可写。
+    // 线上是纯静态托管，没有这个端点，前端探测 404 后自动落回只读模式。
+    if (req.method === 'GET' && urlPath === '/api/meta.json') {
+      return sendJson(res, 200, { writable: true });
+    }
     if (req.method === 'GET' && urlPath === '/api/data') {
       return sendJson(res, 200, getData());
     }

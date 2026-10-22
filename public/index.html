@@ -67,6 +67,8 @@
   .add-sc { color:var(--faint); border:1px dashed var(--border); padding:6px; text-align:center; border-radius:6px; margin-top:12px; font-size:13px; cursor:pointer; }
   .add-sc:hover { color:var(--blue); border-color:var(--primary); }
   .scenario { margin-bottom:6px; }
+  .ro-note { color:var(--faint); font-size:11px; padding:7px 8px; border:1px dashed var(--border); border-radius:6px; margin-top:12px; text-align:center; line-height:1.6; }
+  #save-state.readonly { color:var(--blue); border-color:var(--blue-bg); }
 
   /* 右栏：详情 */
   section.detail { flex:1; overflow-y:auto; padding:28px 36px; }
@@ -121,6 +123,11 @@
 </div>
 
 <script>
+// ===== 模式 =====
+// 是否可写。能探测到 /api/meta.json 说明背后有后端（本地），否则是线上纯静态站。
+// 探测不到一律按只读处理：失败时倒向安全的那一侧。
+let WRITABLE = false;
+
 // ===== 状态 =====
 let state = null;                       // { version, scenarios:[...] }
 let sel = null;                         // { sid, iid } 当前选中
@@ -147,6 +154,7 @@ applyTheme(localStorage.getItem('sp-theme') || 'dark');
 
 // ===== 自动保存（防抖，剥离纯 UI 状态）=====
 function scheduleSave() {
+  if (!WRITABLE) return;                // 只读站不做任何保存，也不动状态提示
   $('save-state').textContent = '保存中…';
   $('save-state').className = 'saving';
   clearTimeout(saveTimer);
@@ -175,8 +183,11 @@ function renderSidebar() {
       `<span class="arrow" style="font-size:10px;color:#8b949e;width:12px">${sc.expanded ? '▼' : '▶'}</span>` +
       `<span>${esc(sc.name)}</span>` +
       `<span class="badge ${sc.type}">${sc.type === 'flow' ? sc.items.length + ' 步' : sc.items.length + ' 条'}</span>` +
-      `<span class="sc-acts"><span title="编辑场景" onclick="event.stopPropagation();openScenarioModal('${sc.id}')">✎</span>` +
-      `<span title="删除场景" onclick="event.stopPropagation();delScenario('${sc.id}')">🗑</span></span>`;
+      // 只读站整段不渲染：场景的编辑 / 删除入口
+      (WRITABLE
+        ? `<span class="sc-acts"><span title="编辑场景" onclick="event.stopPropagation();openScenarioModal('${sc.id}')">✎</span>` +
+          `<span title="删除场景" onclick="event.stopPropagation();delScenario('${sc.id}')">🗑</span></span>`
+        : '');
     head.onclick = () => { sc.expanded = !sc.expanded; renderSidebar(); };  // 折叠是纯 UI 状态，不触发保存
     box.appendChild(head);
 
@@ -184,27 +195,40 @@ function renderSidebar() {
       sc.items.forEach((it, i) => {
         const row = document.createElement('div');
         row.className = 'item' + (sel && sel.sid === sc.id && sel.iid === it.id ? ' active' : '');
-        row.draggable = true;
+        if (WRITABLE) row.draggable = true;
         row.innerHTML =
           (sc.type === 'flow' ? `<span class="num">${i + 1}</span>` : '<span class="dot">·</span>') +
-          `<span class="handle" title="拖拽调整顺序（也可以拖到别的场景）">⠿</span><span>${esc(it.title)}</span>`;
+          // 只读站不渲染拖拽手柄
+          (WRITABLE ? `<span class="handle" title="拖拽调整顺序（也可以拖到别的场景）">⠿</span>` : '') +
+          `<span>${esc(it.title)}</span>`;
         row.onclick = () => { sel = { sid: sc.id, iid: it.id }; renderSidebar(); renderDetail(); };
-        row.ondragstart = e => { drag = { sid: sc.id, iid: it.id }; e.dataTransfer.effectAllowed = 'move'; };
-        row.ondragend = () => { drag = null; };
-        row.ondragover = e => { e.preventDefault(); row.classList.add('drag-over'); };
-        row.ondragleave = () => row.classList.remove('drag-over');
-        row.ondrop = e => { e.preventDefault(); row.classList.remove('drag-over'); handleDrop(sc.id, it.id); };
+        if (WRITABLE) {
+          row.ondragstart = e => { drag = { sid: sc.id, iid: it.id }; e.dataTransfer.effectAllowed = 'move'; };
+          row.ondragend = () => { drag = null; };
+          row.ondragover = e => { e.preventDefault(); row.classList.add('drag-over'); };
+          row.ondragleave = () => row.classList.remove('drag-over');
+          row.ondrop = e => { e.preventDefault(); row.classList.remove('drag-over'); handleDrop(sc.id, it.id); };
+        }
         box.appendChild(row);
       });
-      const add = document.createElement('div'); add.className = 'add-item'; add.textContent = '+ 添加提示词';
-      add.onclick = () => openPromptModal(sc.id, null);
-      box.appendChild(add);
+      // 只读站不渲染「+ 添加提示词」
+      if (WRITABLE) {
+        const add = document.createElement('div'); add.className = 'add-item'; add.textContent = '+ 添加提示词';
+        add.onclick = () => openPromptModal(sc.id, null);
+        box.appendChild(add);
+      }
     }
     tree.appendChild(box);
   });
-  const addSc = document.createElement('div'); addSc.className = 'add-sc'; addSc.textContent = '+ 新建场景';
-  addSc.onclick = () => openScenarioModal(null);
-  tree.appendChild(addSc);
+  if (WRITABLE) {
+    const addSc = document.createElement('div'); addSc.className = 'add-sc'; addSc.textContent = '+ 新建场景';
+    addSc.onclick = () => openScenarioModal(null);
+    tree.appendChild(addSc);
+  } else {
+    const note = document.createElement('div'); note.className = 'ro-note';
+    note.textContent = '🔒 在线只读视图 · 增删改请在本地进行';
+    tree.appendChild(note);
+  }
 }
 
 // 拖拽落点：把拖拽条目移到目标条目之前（支持跨场景）
@@ -231,37 +255,27 @@ function renderDetail() {
   const stepInfo = sc.type === 'flow'
     ? `${sc.name} · 第 ${idx + 1} 步 / 共 ${sc.items.length} 步`
     : `${sc.name} · 集合`;
-  const copyCount = it.copyCount || 0;
-  const copyBadge = copyCount > 0
-    ? `<span style="font-size:12px;color:var(--weak);font-weight:400;margin-left:10px;padding:2px 8px;background:var(--chip);border-radius:10px">已复制 ${copyCount} 次</span>`
-    : '';
   el.innerHTML =
     `<div class="d-path">${esc(stepInfo)}</div>` +
-    `<div class="d-title">${sc.type === 'flow' ? String(idx + 1).padStart(2, '0') + ' · ' : ''}${esc(it.title)}${copyBadge}</div>` +
-    `<div class="d-desc">${esc(it.desc) || '<span style="color:#4d5860">（无简介，编辑时可点「✨ AI 生成」）</span>'}</div>` +
+    `<div class="d-title">${sc.type === 'flow' ? String(idx + 1).padStart(2, '0') + ' · ' : ''}${esc(it.title)}</div>` +
+    `<div class="d-desc">${esc(it.desc) || `<span style="color:var(--faint)">（无简介${WRITABLE ? '，编辑时可点「✨ AI 生成」' : ''}）</span>`}</div>` +
     `<div class="btns">` +
     `<button class="btn primary" onclick="copyBody()">📋 复制</button>` +
-    `<button class="btn" onclick="openPromptModal('${sc.id}','${it.id}')">✏️ 编辑</button>` +
-    `<button class="btn danger" onclick="delItem('${sc.id}','${it.id}')">🗑 删除</button></div>` +
+    // 只读站不渲染编辑 / 删除。AI 生成简介只存在于编辑弹窗里，因此线上同样没有。
+    (WRITABLE
+      ? `<button class="btn" onclick="openPromptModal('${sc.id}','${it.id}')">✏️ 编辑</button>` +
+        `<button class="btn danger" onclick="delItem('${sc.id}','${it.id}')">🗑 删除</button>`
+      : '') +
+    `</div>` +
     `<div class="d-body">${esc(it.body)}</div>` +
     (it.source ? `<div class="d-meta">来源：${esc(it.source)} · 存于 ${(it.createdAt || '').slice(0, 10)}</div>`
                : `<div class="d-meta">存于 ${(it.createdAt || '').slice(0, 10)}</div>`);
 }
 
-// 全局：上次成功复制的时间戳（用于 5s 防抖）
-let lastCopyAt = { id: null, ts: 0 };
-
+// 复制到剪贴板。本地与线上行为完全一致：只做复制，不记次数。
 function copyBody() {
   const sc = findSc(sel.sid), it = sc.items.find(i => i.id === sel.iid);
   navigator.clipboard.writeText(it.body).then(() => {
-    // 5 秒内同一条不重复计数
-    const now = Date.now();
-    if (lastCopyAt.id !== it.id || now - lastCopyAt.ts >= 5000) {
-      it.copyCount = (it.copyCount || 0) + 1;
-      lastCopyAt = { id: it.id, ts: now };
-      scheduleSave();
-      renderDetail();  // 刷新右栏让计数立刻可见
-    }
     const b = document.querySelector('.btn.primary');
     const old = b.textContent;
     b.textContent = '✅ 已复制';
@@ -454,17 +468,54 @@ async function aiGenDesc(btn) {
   }
 }
 
+// 判定当前页面能不能写。默认只读，只有明确问到可写标志才升级。
+// 本地：/api/meta.json 由 server.js 提供 → 可写
+// 线上：纯静态托管没有这个端点 → 保持只读
+async function loadWritable() {
+  WRITABLE = false;
+  // 1) 本地后端提供的标志：问得到 = 背后有 server.js = 可写，问到就直接用
+  try {
+    const r = await fetch('/api/meta.json', { cache: 'no-store' });
+    if (r.ok && (r.headers.get('content-type') || '').includes('json')) {
+      WRITABLE = !!(await r.json()).writable;
+      return;
+    }
+  } catch { /* 线上没有后端，往下走 */ }
+  // 2) 线上静态声明的标志。两者都问不到也保持只读——失败永远倒向安全那侧。
+  try {
+    const r = await fetch('meta.json', { cache: 'no-store' });
+    if (r.ok) WRITABLE = !!(await r.json()).writable;
+  } catch { /* 保持只读 */ }
+}
+
+// 读数据。线上没有 /api/data 这个接口，回退到同目录的静态 prompts.json。
+async function loadData() {
+  try {
+    const r = await fetch('/api/data', { cache: 'no-store' });
+    if (r.ok) return await r.json();
+  } catch { /* 线上走静态文件 */ }
+  const r2 = await fetch('prompts.json', { cache: 'no-store' });
+  if (!r2.ok) throw new Error('HTTP ' + r2.status);
+  return await r2.json();
+}
+
 // ===== 启动 =====
 (async function init() {
   try {
-    const r = await fetch('/api/data');
-    if (!r.ok) throw new Error('HTTP ' + r.status);
-    state = await r.json();
+    await loadWritable();
+    state = await loadData();
     state.scenarios.forEach(sc => { sc.expanded = false; });
     const first = state.scenarios[0];
     if (first && first.items[0]) { first.expanded = true; sel = { sid: first.id, iid: first.items[0].id }; }
-    $('save-state').textContent = '已就绪';
-    $('save-state').className = 'saved';
+    if (WRITABLE) {
+      $('save-state').textContent = '已就绪';
+      $('save-state').className = 'saved';
+    } else {
+      // 只读站没有「已保存」可言，换成只读信息
+      const total = state.scenarios.reduce((n, s) => n + s.items.length, 0);
+      $('save-state').textContent = `只读 · ${state.scenarios.length} 个场景 ${total} 条`;
+      $('save-state').className = 'readonly';
+    }
     renderSidebar(); renderDetail();
   } catch (e) {
     $('save-state').textContent = '加载失败';

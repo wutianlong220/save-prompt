@@ -4,6 +4,8 @@ config.json
 # 工具目录
 node_modules/
 .superpowers/
+demo/
+.zcode/
 
 # 系统与日志
 .DS_Store

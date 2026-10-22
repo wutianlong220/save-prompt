@@ -1,0 +1,6 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
+  "buildCommand": "echo '静态站点，无需构建'",
+  "outputDirectory": "public"
+}

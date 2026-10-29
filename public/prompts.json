@@ -2,69 +2,82 @@
   "version": 1,
   "scenarios": [
     {
-      "id": "sc_demo_game",
-      "name": "🎮 做游戏网站（生财航海）",
-      "type": "flow",
-      "createdAt": "2026-08-17T04:00:00.000Z",
+      "id": "sc_mvtl8py2lyhx",
+      "name": "深度思考",
+      "type": "set",
+      "createdAt": "2026-10-29T13:37:40.442Z",
       "items": [
         {
-          "id": "p_mt12gu4h5jhy",
-          "title": "关键词清洗与分类提示词",
-          "desc": "基于关键词文件，整理10-20个分类JSON供内容页使用。",
-          "body": "基于关键词.md，新建一个关键词分类文档：keywords.json。\n对【所有关键词】分类，必须有的分类：guide，要求最终关键词总数 10-20 个。\n分类禁止大空，例如gameplay、general。\n假设有Codes分类: 其分类下只能有一个关键词。\n关键词中核心主词和非本主题词过滤掉。\n同义词要合并（合并后的关键词必须是搜索量最大、大众习惯搜索那个）。\n并给出同义词合并后，还有多少，即还能做多少\"一个词一个内页\"的精品内容。 \n分类1：xxx\n关键词1\n关键词2\n…\n严禁缺少任何一个关键词（游戏词本身和非该游戏主题词除外）。\n关键词优化：\n1、不允许存在非英文（需翻译成英文）\n2、可修改某单词拼写错误，但禁止扩写\n3、主题词统一，**关键词命名统一成 游戏主题名 xxx**。\n除此之外，禁止做其他修改。\n注意事项：\n**Mutually Exclusive（相互独立）**：\n1、不同分类下，不要存在包含关系，例如Guides和Beginner Guides\n2、一个分类下,不能出现同义关键词（例如只是单复数区别）\nCollectively Exhaustive（完全穷尽）：一个分类下所有有效关键词要覆盖这个分类可能的所有需求，且具备一定逻辑关系（顺序或包含）\n还有一些是YouTube视频标题，也请分析高流量视频，提取关键词。\n手动写,禁止使用脚本处理。\n每个分类下,重要(流量大的)关键词排在前面。\n\n输出格式必须是（禁止增加无用信息）：\n{\n  \"categories\": [\n    {\n      \"category\": \"100 Waves Later\",\n      \"keywords\": [\"100 waves later tier list\", \"100 wave later code\"]\n    },\n    {\n      \"category\": \"Anime Card Collection\",\n      \"keywords\": [\"anime card collection codes\", \"anime card collection guide\"]\n    }\n  ]\n}",
+          "id": "p_mvtl9tumo1k7",
+          "title": "从目标倒推需要的资源和行动",
+          "desc": "将模糊目标倒推为可衡量、可执行的行动路径，依次澄清目标、盘点资源、筛选关键动作、划分阶段并设定里程碑与验收标准，再落实到每日任务，同时依据反馈验证方向、及时调整策略。适用于目标明确但规划混乱、不知从何下手的项目或成长计划；若目标描述模糊、边界不清或缺少衡量标准，应先补充细节并回答澄清问题，再开始拆解，避免泛泛而谈。",
+          "body": "我有一个明确的目标，想请你帮我从目标倒推，系统拆解达成它所需的路径。请按照以下框架帮我梳理：\n\n目标澄清：帮我确认这个目标是否清晰、可衡量、可执行。如果不够清晰，请向我提问以进一步明确。\n\n资源盘点：达成这个目标需要哪些资源？包括能力、时间、资金、工具、人脉、信息等。\n\n关键动作：需要执行哪些核心动作？哪些是杠杆最高的？哪些可以跳过或外包？\n\n阶段拆解：如何把这个目标拆成不同阶段？每个阶段的里程碑和验收标准是什么？\n\n每日落地：如何落实到每天具体要做的事情？请给出一个可执行的日常框架。\n\n验证与调整：如何判断自己走在正确的方向上？有哪些信号说明需要调整策略？\n\n我的目标是：【在此填入你的目标】\n\n请尽量具体、可操作，避免泛泛而谈。如果我的目标描述不够清晰，请先向我提问，再开始拆解。",
           "source": "",
-          "createdAt": "2026-08-20T05:15:08.801Z",
-          "updatedAt": "2026-08-20T05:15:08.801Z",
-          "copyCount": 3
+          "createdAt": "2026-10-29T13:38:32.158Z",
+          "updatedAt": "2026-10-29T13:38:32.158Z"
+        }
+      ]
+    },
+    {
+      "id": "sc_mtojzye31sf8",
+      "name": "AI编程做产品",
+      "type": "set",
+      "createdAt": "2026-09-05T15:44:36.315Z",
+      "items": [
+        {
+          "id": "p_mtok0uz87pxm",
+          "title": "完善产品SPEC",
+          "desc": "通过五维提问逐项引导用户完善产品需求文档，不直接改写，用于需求评审、PRD打磨或产品新功能立项自查，需注意按序单问、耐心逐轮回答，避免一次给出所有问题或跳过维度。",
+          "body": "你是一个产品需求教练。我会给你一份产品 SPEC（草稿），请你不要直接帮我改写，而是通过提问的方式帮我完善它。\n\n请你逐条检查以下五个维度，每个维度问我1-2个关键问题：\n1. 问题陈述：我的用户是谁？他们的痛点够具体吗？\n2. 方案描述：核心玩法清楚吗？有没有遗漏的关键环节？\n3. 技术约束：有没有我没想到的限制？\n4. 明确不做的事：有没有容易跑偏的方向我忘记排除了？\n5. 成功标准：用户做完之后，怎样才算\"成功\"？标准够具体吗？\n\n一次只问一个维度，等我回答后再问下一个。\n\n这是我的SPEC草稿：\n[把你写的草稿粘贴在这里]",
+          "source": "",
+          "createdAt": "2026-09-05T15:45:18.548Z",
+          "updatedAt": "2026-09-05T15:45:18.548Z",
+          "copyCount": 4
         },
         {
-          "id": "p_mt2kd6ywwcz5",
-          "title": "游戏主题站结构化信息提取与页面生成指令​",
-          "desc": "为指定游戏生成SEO友好的粉丝Wiki网站全套开发资料，含基础信息、结构化JSON、主题色和多语言方案，适用于Roblox等平台游戏的攻略站建站场景。注意：禁止输出竞对网站和404链接，数据需贴近玩家直觉且0值不写，严格按字符数限制自查。",
-          "body": "游戏词：{TOPIC}\n\n请按以下结构提供完整的网站开发信息：\n【特别注意：1.注意不要附上我的竞对的网站（官网除外）2.禁止输出任何一个404/打不开的链接】\n\n## 1、主题基础信息\n（1）给出官方网站（禁止输出任何一个404/打不开的链接）和常用社群（如Discord、reddit等）和官方 trailer youtube链接（如果没有随便选一个爆款youtube视频）。\n\n（2）搜索给出这4组用户关心的数据和SEO元数据，严格按照以下格式返回：（注意：4组用户关心的数据一定要最贴近玩家直觉，具体内容不限制，不要死板只查找Active Codes、Daily Updates、Total Visits、Units Available这4项，Players Online、 Peak CCU\"、User Reviews、Release Date·····都可以。注意：1.某项数据为0就不要写，比如：禁止写Active Codes：0 2.value的值后面不要写任何括号）\n\n  {\n    \"home\": {\n      \"meta\": {\n        \"title\": \"游戏名 Wiki — 核心关键词1, 核心关键词2\",\n        \"description\": \"SEO description（140-160字符）\"\n      },\n      \"hero\": {\n        \"eyebrow\": \"Fan-Made Community Wiki（或类似标语）\",\n        \"title\": \"游戏名\",\n        \"description\": \"游戏核心玩法介绍，2-3句，吸引玩家点击\",\n        \"stats\": [\"发布日期（如 Launched Jun 2025）\", \"最近更新日期\", \"核心数据1（如 3 Races）\", \"核心数据2（如 Lv100 Cap）\", \"核心数据3（如 130+ Skills）\"],\n        \"primaryCta\": \"Start Beginner Guide（或类似首要行动按钮）\",\n        \"secondaryCta\": \"Compare Races（或类似次要行动）\",\n        \"tertiaryCta\": \"Check Active Codes（或类似第三行动）\",\n        \"videoLabel\": \"Official media\"\n      },\n      \"start\": {\n        \"eyebrow\": \"Start Here\",\n        \"title\": \"Your 游戏名 Journey\",\n        \"cards\": [\n          {\"number\": \"1\", \"title\": \"Beginner Guide（固定：新手入门）\", \"description\": \"新手入门的完整攻略介绍。\"},\n          {\"number\": \"2\", \"title\": \"升级/刷资源/职业/Boss 等（根据游戏特点选择）\", \"description\": \"该游戏前2小时玩家最常搜的内容。\"},\n          {\"number\": \"3\", \"title\": \"与卡片2不同类型\", \"description\": \"该游戏核心玩法的教学。\"},\n          {\"number\": \"4\", \"title\": \"与卡片2/3不同类型\", \"description\": \"游戏特色机制或进阶内容。\"}\n        ]\n      },\n      \"aboutGame\": {\n        \"title\": \"What is 游戏名?\",\n        \"paragraphs\": [\n          \"游戏类型和核心玩法的2-3句介绍（如：游戏名 是一个 Roblox 上受 XX 启发的格斗 RPG...）\",\n          \"进一步说明游戏特色的2-3句（如：无论是解锁第一个 XX、进化系统、还是...）\"\n        ],\n        \"stats\": [\n          {\"label\": \"Developer\", \"value\": \"开发工作室名\"},\n          {\"label\": \"Platform\", \"value\": \"Roblox / Steam / PS5 等\"},\n          {\"label\": \"Genre\", \"value\": \"Fighting RPG 等\"},\n          {\"label\": \"Visits\", \"value\": \"12.6M+\"},\n          {\"label\": \"Favorites\", \"value\": \"243K+\"},\n          {\"label\": \"核心内容数\", \"value\": \"130+ Skills 等\"},\n          {\"label\": \"等级上限\", \"value\": \"100 等\"}\n        ],\n        \"cta\": \"Explore All Guides\"\n      },\n      \"finalCta\": {\n        \"title\": \"Ready to Master 游戏名?\",\n        \"description\": \"号召性文案（如：From your first steps in XX to endgame boss fights, our community wiki has you covered...）\",\n        \"primary\": \"Read the Beginner Guide\",\n        \"secondary\": \"Play on Roblox（或对应平台）\"\n      }\n    },\n    \"footer\": {\n      \"aboutTitle\": \"游戏名 Wiki\",\n      \"about\": \"Wiki 的简要介绍（如：游戏名 Wiki 是一个独立的粉丝攻略站，覆盖...）\",\n      \"description\": \"一句话描述游戏（如：Free XX-inspired fighting RPG on Roblox. 3 races, 130+ skills, Lv100 cap.）\",\n      \"playGame\": \"Play 游戏名（或对应平台按钮文字）\",\n      \"officialDiscord\": \"Official Discord\",\n      \"officialYoutube\": \"Official YouTube\",\n      \"communityTool\": \"社区工具名称和链接（如有，如 Skill Planner）\",\n      \"privacyPolicy\": \"Privacy Policy\",\n      \"termsOfService\": \"Terms of Service\"\n    },\n    \"metadata\": {\n      \"title\": \"游戏名 Wiki — 核心关键词1, 核心关键词2（≤60字符）\",\n      \"description\": \"简洁描述网站提供的内容和价值（140-160字符）\",\n      \"keywords\": \"游戏名, 平台, 核心关键词列表（≤100字符）\"\n    }\n  }\n\n  完成后自查：\n- home.meta.title 字符数是否 ≤ 60？\n- metadata.title 字符数是否 ≤ 60？\n- metadata.description 字符数是否在 140-160 之间？\n- metadata.keywords 字符数是否 ≤ 100？\n- home.hero.stats 数组是否为纯字符串（不含对象）？\n- home.start.cards 是否有 4 个对象？\n- home.aboutGame.stats 是否有 label+value 对？\n- footer.about 是否有 2-3 句介绍？\n- sidebarCodes 是否有 2 条兑换码？（如果没有兑换码则填\"暂无\"）\n\n## 3、网站主题色应该什么颜色？默认颜色应该选择深色还是亮色\n\n按照这种格式给我：\n/* 导航页主题色 - 亮色主题 */\n --nav-theme: 152 60% 48%;  /* green-500 (原来的 #43b176) */\n --nav-theme-light: 152 60% 58%;  /* 更浅的绿色 */\n /* 导航页主题色 - 暗色主题 */\n --nav-theme: 152 60% 48%;  /* green-500 */\n --nav-theme-light: 152 60% 58%;  /* 更浅的绿色 */\n\n## 4、多语言\n\n根据热度，分析应该支持哪几门语言（并搜索对应本地化主题名），按流量排优先级\n先说结论，按优先级排列, 最多4门语言（必须有一个是英语，中文除外）\n请以清晰的 Markdown 格式返回所有信息。",
-          "source": "",
-          "createdAt": "2026-08-21T06:23:58.088Z",
-          "updatedAt": "2026-08-21T06:23:58.088Z",
-          "copyCount": 2
+          "id": "p_mu8w116po1a6",
+          "title": "新旧API切换",
+          "desc": "用于Next.js项目下把AI供应商从旧API整体迁移到新API，先出方案再改代码，并做适配层、可观测与错误处理。适用于需要换模型/换平台且要平滑替换、保留上层接口不变的场景。注意：先确认API四要素与能力映射；Key仅放服务端；等回复\"开始改\"再动文件。",
+          "body": "你是我的全栈工程师。请帮我把当前项目里的默认 AI API 提供商切换为另一家 API，先输出实施计划，不要立刻改代码。\n【项目背景】\n- 技术栈：Next.js (App Router) + TypeScript\n- 当前已有功能：{填写，例如“文生图功能 / 聊天回复功能 / 语音转写功能」\n- 当前接入：{旧供应商，如 coze sdk / OpenRouter / 火山引擎}\n- 本次目标：把功能从 {旧供应商/旧模型} 替换到 {新供应商/新模型}\n\n【你先确认的四个问题（先做这4步）】\n1) 旧 API 的对外能力边界：入参、出参、错误码、速率限制\n2) 新 API 的能力是否能完整替代（消息格式、流式、图片/文件参数等）\n3) 是否需要做字段映射（例如 messages、response schema）\n4) 是否需要兼容回退策略（失败时回退旧供应商）\n\n【API 四要素（替换目标 API）】\n1) 新 API Key：{填写}\n2) 示例代码（curl）：{粘贴官方示例}\n3) 示例输入（Request Body）：{粘贴请求示例}\n4) 示例输出（Response Body）：{粘贴返回示例}\n\n\n【实现要求】\n1. 先输出完整实施计划（含风险），不要先改代码\n2. API Key 只能放服务端环境变量，禁止前端暴露；写入 .env\n3. 统一使用服务端 service 层接入，页面组件只负责渲染/交互\n4. 新增 provider 适配层，保证上层调用接口不变（你可抽象为统一 adapter）\n5. 增加错误分类处理：401、403、429、5xx、timeout，返回可读的业务错误\n6. 增加可观测日志（请求开始/结束、provider、耗时、状态码、错误摘要）\n\n【你必须输出】\n- 步骤计划（每步包含目的+文件）\n- 你建议保留的公共接口定义（签名/返回结构）\n- 关键边界映射表（旧字段 -> 新字段；新字段 -> 兼容字段）\n- 对比表：替换前后能力差异\n\n请先给我计划，等我回复“开始改”后，再给出代码实现步骤并开始改文件。",
+          "source": "https://scys.com/deepsea/2001/course/164?chapterId=10597",
+          "createdAt": "2026-09-19T21:16:45.505Z",
+          "updatedAt": "2026-09-19T21:16:45.505Z"
         },
         {
-          "id": "p_mt2kfabb339e",
-          "title": "游戏主题站Favicon Logo 生成提示词",
-          "desc": "为游戏词生成可直接作 favicon logo 的英文绘画提示词，输出 512×512 PNG 格式。用于网站图标设计场景。注意：提示词需简洁适配方形构图，避免复杂细节与文字，确保缩略后仍清晰可辨。",
-          "body": "游戏词：{TOPIC}\n直接适合该网站的favicon logo英文绘画提示词，目标格式为：512*512 png",
-          "source": "",
-          "createdAt": "2026-08-21T06:25:35.735Z",
-          "updatedAt": "2026-08-21T06:25:35.735Z"
+          "id": "p_mu8x5dlfmfzf",
+          "title": "在项目中接入指定API",
+          "desc": "帮你把外部 API 规范接入 Next.js+TS 项目，按计划逐步实现服务端调用、密钥保护与错误处理。适用于新增第三方接口联调场景。需先填齐项目背景与 API 四要素，收到\"开始改\"再动代码。",
+          "body": "你是我的全栈工程师。请帮我把下面这个 API 接入当前项目。\n\n【项目背景】\n- 技术栈：Next.js(App Router) + TypeScript\n- 当前已有功能：{填写，如果没有，就说没有}\n- 本次目标：{填写，例如\"通过调用image to image的API，实现虚拟试衣功能；用户需需要传入两张图片，一张是模特照片，一张是衣服\"}\n\n【API 四要素】\n1) API Key：{填写}\n2) 示例代码（curl）：{粘贴官方示例}\n3) 示例输入：{粘贴请求 body}\n4) 示例输出：{粘贴返回示例}\n\n【实现要求】\n1. 先输出实施计划，不要立刻改代码\n2. API Key 只能走服务端环境变量，不能暴露到前端；API Key配置到.env中\n3. 新增 service 层，不要把调用写死在页面组件\n4. 增加错误处理：401 / 429 / timeout\n5. 增加开发日志，便于排查\n6. 最后给我：\n   - 修改文件清单\n   - 本地验证步骤\n   - 失败回滚方案\n\n请先给计划，等我回复\"开始改\"后再改代码。",
+          "source": "https://scys.com/deepsea/2001/course/164?chapterId=10598",
+          "createdAt": "2026-09-19T21:48:07.827Z",
+          "updatedAt": "2026-09-19T21:48:07.827Z"
         },
         {
-          "id": "p_mt2kho7uxiyr",
-          "title": "游戏Wiki站复刻指令",
-          "desc": "用于一比一复刻指定游戏站点的网页结构与 UI 布局；适用于需要快速搭建多页面、多语言 MDX 站点时参照对标站实现首页、列表页、详情页等场景；需注意：URL 必须真实可达，应先抓取目标站页面以确保布局精准，且不应自行改动设计，应严格还原。",
-          "body": "复刻这个游戏站：[对标站首页 URL]，至少实现三个页面——\n首页：[URL]、列表 / 导航页：[URL，如 /classes]、文章详情页：[URL，如 /classes/xxx]。\nUI 布局完全参照目标站复刻，不要自行设计。\n技术栈用 Next.js + 多语言 + MDX 写内容。",
+          "id": "p_mu98sbv6bz89",
+          "title": "API报错排查",
+          "desc": "按工程排查流程定位API调用失败，输出三个最可能的根因、验证步骤、最小修复方案及验收清单，适用于接口报错时快速定位。注意事项：错误信息和日志必须贴全，否则根因会偏离；近期改动要如实填写，便于关联变更引入的回归问题；提示词明确要求先定位再改，禁止大改架构或跳过验证。",
+          "body": "我现在 API 调用失败，请按工程排查流程帮我定位。\n\n【错误信息】\n- 状态码：{填写}\n- 响应体：{粘贴}\n- 控制台日志：{粘贴}\n- 最近改动：{填写}\n\n【你需要输出】\n1. 最可能的3个根因（按概率排序）\n2. 每个根因的验证步骤\n3. 最小修复方案（不要大改架构）\n4. 修复后的验证清单（成功标准）\n\n请先定位，再给修改建议，不要直接重构。",
           "source": "",
-          "createdAt": "2026-08-21T06:27:27.066Z",
-          "updatedAt": "2026-08-21T06:27:27.066Z",
-          "copyCount": 1
+          "createdAt": "2026-09-20T03:13:54.450Z",
+          "updatedAt": "2026-09-20T03:13:54.450Z"
         },
         {
-          "id": "p_mt2klqakdtxr",
-          "title": "游戏Wiki站调研数据填充首页与全局替换指令​",
-          "desc": "将调研到的真实首页信息填入复刻网站，替换站名、配置模块文案、链接、SEO与主题色，并在第4关使用，避免编造、不确定则标待确认。",
-          "body": "把前面调研出的首页信息，填进复刻好的网站：\n1. 全站旧游戏名 → 替换成我的游戏名（首页、页脚、侧边栏、法律页都要换，无残留）\n2. 首页各模块（Hero / 新手引导 / 游戏介绍 / 兑换码 / 底部号召）用调研的真实文案\n3. 官方链接（官网 / Discord / YouTube）、SEO title / description / keywords、主题色（HSL）、多语言，按调研结果配置\n4. 侧边栏兑换码用调研的真实码；没有就写\"暂无\"，绝不编造\n所有内容只写第 4 关调研的真实信息，不确定的标\"待确认\"，不要编造数值和兑换码。",
-          "source": "",
-          "createdAt": "2026-08-21T06:30:36.381Z",
-          "updatedAt": "2026-08-21T06:31:50.813Z",
-          "copyCount": 1
+          "id": "p_mucpa1798stm",
+          "title": "Next.js 工程化复刻",
+          "desc": "用于按Section/Component拆分复刻网站UI代码，配合截图效果更佳。使用场景：前端快速复刻参考站点。注意事项：需明确技术栈，清理图片素材，便于AI准确还原布局与样式。",
+          "body": "请用Next.js/Shadcn/TailwindCSS框架复刻 {贴上要复刻的网站地址}\n按照Section/Component，尽量拆分成为更细的Component并且放到合适的目录\n\n{如果你再贴上cleanup.pictures的截图，就更好了}",
+          "source": "https://scys.com/deepsea/2001/course/164?chapterId=10853",
+          "createdAt": "2026-09-22T13:18:52.821Z",
+          "updatedAt": "2026-09-22T13:18:52.821Z"
         },
         {
-          "id": "p_mt2ko1f4ip1b",
-          "title": "游戏Wiki站内页SEO内容生成指令",
-          "desc": "用于游戏内页SEO内容生成，按关键词整合多源素材产出1200字页面。适用批量产出游戏攻略/资讯内页。注意：title与meta需含关键词且控字数，模糊信息标\"待确认\"，禁止编造数值、角色名或兑换码，仅用已收集的真实数据。",
-          "body": "针对内页关键词，把收集到的信息过滤无效信息，整合收集的多源数据，然后填进各个内页。\n一个关键词填一个内页，输入如下：\n- 游戏关键词：keywords.json\n- 为这个关键词收集到的真实信息（第 4 关调研的素材，贴在这里）：关键词素材.md\n要求：\n1. 页面 title 含这个关键词，40-60字符；meta description 含关键词、140-160 字符\n2. 开头直接回答玩家的搜索问题，不绕弯\n3. 全文1200字左右；分 H2 小节，每段 3-4 句，适合扫读；\n4. 只写上面收集到的真实信息，不确定的标\"待确认\"\n5. 不要编造数值、角色名、兑换码；",
-          "source": "",
-          "createdAt": "2026-08-21T06:32:24.112Z",
-          "updatedAt": "2026-08-21T06:32:24.112Z",
-          "copyCount": 1
+          "id": "p_mucu3ljh8aos",
+          "title": "帮助排查本地开发报错",
+          "desc": "辅助排查 Next.js 本地开发报错，输入报错信息和最近操作即可定位原因与修法。适用于改路由、改配置后报错的场景。注意报错粘贴要完整，操作描述越具体越易定位。",
+          "body": "我在用 Next.js 本地开发，遇到了一个报错。\n报错信息如下： [粘贴报错]\n我刚才做的操作是： [描述你做了什么，比如\"修改了 app/api/chat/route.ts 里的一个函数\"]\n请帮我分析是什么原因，怎么修。",
+          "source": "https://scys.com/deepsea/2001/course/164?chapterId=10860",
+          "createdAt": "2026-09-22T15:33:50.669Z",
+          "updatedAt": "2026-09-22T15:33:50.669Z"
         }
       ]
     },
@@ -426,65 +439,69 @@
       "items": []
     },
     {
-      "id": "sc_mtojzye31sf8",
-      "name": "AI编程做产品",
-      "type": "set",
-      "createdAt": "2026-09-05T15:44:36.315Z",
+      "id": "sc_demo_game",
+      "name": "🎮 做游戏网站（生财航海）",
+      "type": "flow",
+      "createdAt": "2026-08-17T04:00:00.000Z",
       "items": [
         {
-          "id": "p_mtok0uz87pxm",
-          "title": "完善产品SPEC",
-          "desc": "通过五维提问逐项引导用户完善产品需求文档，不直接改写，用于需求评审、PRD打磨或产品新功能立项自查，需注意按序单问、耐心逐轮回答，避免一次给出所有问题或跳过维度。",
-          "body": "你是一个产品需求教练。我会给你一份产品 SPEC（草稿），请你不要直接帮我改写，而是通过提问的方式帮我完善它。\n\n请你逐条检查以下五个维度，每个维度问我1-2个关键问题：\n1. 问题陈述：我的用户是谁？他们的痛点够具体吗？\n2. 方案描述：核心玩法清楚吗？有没有遗漏的关键环节？\n3. 技术约束：有没有我没想到的限制？\n4. 明确不做的事：有没有容易跑偏的方向我忘记排除了？\n5. 成功标准：用户做完之后，怎样才算\"成功\"？标准够具体吗？\n\n一次只问一个维度，等我回答后再问下一个。\n\n这是我的SPEC草稿：\n[把你写的草稿粘贴在这里]",
+          "id": "p_mt12gu4h5jhy",
+          "title": "关键词清洗与分类提示词",
+          "desc": "基于关键词文件，整理10-20个分类JSON供内容页使用。",
+          "body": "基于关键词.md，新建一个关键词分类文档：keywords.json。\n对【所有关键词】分类，必须有的分类：guide，要求最终关键词总数 10-20 个。\n分类禁止大空，例如gameplay、general。\n假设有Codes分类: 其分类下只能有一个关键词。\n关键词中核心主词和非本主题词过滤掉。\n同义词要合并（合并后的关键词必须是搜索量最大、大众习惯搜索那个）。\n并给出同义词合并后，还有多少，即还能做多少\"一个词一个内页\"的精品内容。 \n分类1：xxx\n关键词1\n关键词2\n…\n严禁缺少任何一个关键词（游戏词本身和非该游戏主题词除外）。\n关键词优化：\n1、不允许存在非英文（需翻译成英文）\n2、可修改某单词拼写错误，但禁止扩写\n3、主题词统一，**关键词命名统一成 游戏主题名 xxx**。\n除此之外，禁止做其他修改。\n注意事项：\n**Mutually Exclusive（相互独立）**：\n1、不同分类下，不要存在包含关系，例如Guides和Beginner Guides\n2、一个分类下,不能出现同义关键词（例如只是单复数区别）\nCollectively Exhaustive（完全穷尽）：一个分类下所有有效关键词要覆盖这个分类可能的所有需求，且具备一定逻辑关系（顺序或包含）\n还有一些是YouTube视频标题，也请分析高流量视频，提取关键词。\n手动写,禁止使用脚本处理。\n每个分类下,重要(流量大的)关键词排在前面。\n\n输出格式必须是（禁止增加无用信息）：\n{\n  \"categories\": [\n    {\n      \"category\": \"100 Waves Later\",\n      \"keywords\": [\"100 waves later tier list\", \"100 wave later code\"]\n    },\n    {\n      \"category\": \"Anime Card Collection\",\n      \"keywords\": [\"anime card collection codes\", \"anime card collection guide\"]\n    }\n  ]\n}",
           "source": "",
-          "createdAt": "2026-09-05T15:45:18.548Z",
-          "updatedAt": "2026-09-05T15:45:18.548Z",
-          "copyCount": 4
+          "createdAt": "2026-08-20T05:15:08.801Z",
+          "updatedAt": "2026-08-20T05:15:08.801Z",
+          "copyCount": 3
         },
         {
-          "id": "p_mu8w116po1a6",
-          "title": "新旧API切换",
-          "desc": "用于Next.js项目下把AI供应商从旧API整体迁移到新API，先出方案再改代码，并做适配层、可观测与错误处理。适用于需要换模型/换平台且要平滑替换、保留上层接口不变的场景。注意：先确认API四要素与能力映射；Key仅放服务端；等回复\"开始改\"再动文件。",
-          "body": "你是我的全栈工程师。请帮我把当前项目里的默认 AI API 提供商切换为另一家 API，先输出实施计划，不要立刻改代码。\n【项目背景】\n- 技术栈：Next.js (App Router) + TypeScript\n- 当前已有功能：{填写，例如“文生图功能 / 聊天回复功能 / 语音转写功能」\n- 当前接入：{旧供应商，如 coze sdk / OpenRouter / 火山引擎}\n- 本次目标：把功能从 {旧供应商/旧模型} 替换到 {新供应商/新模型}\n\n【你先确认的四个问题（先做这4步）】\n1) 旧 API 的对外能力边界：入参、出参、错误码、速率限制\n2) 新 API 的能力是否能完整替代（消息格式、流式、图片/文件参数等）\n3) 是否需要做字段映射（例如 messages、response schema）\n4) 是否需要兼容回退策略（失败时回退旧供应商）\n\n【API 四要素（替换目标 API）】\n1) 新 API Key：{填写}\n2) 示例代码（curl）：{粘贴官方示例}\n3) 示例输入（Request Body）：{粘贴请求示例}\n4) 示例输出（Response Body）：{粘贴返回示例}\n\n\n【实现要求】\n1. 先输出完整实施计划（含风险），不要先改代码\n2. API Key 只能放服务端环境变量，禁止前端暴露；写入 .env\n3. 统一使用服务端 service 层接入，页面组件只负责渲染/交互\n4. 新增 provider 适配层，保证上层调用接口不变（你可抽象为统一 adapter）\n5. 增加错误分类处理：401、403、429、5xx、timeout，返回可读的业务错误\n6. 增加可观测日志（请求开始/结束、provider、耗时、状态码、错误摘要）\n\n【你必须输出】\n- 步骤计划（每步包含目的+文件）\n- 你建议保留的公共接口定义（签名/返回结构）\n- 关键边界映射表（旧字段 -> 新字段；新字段 -> 兼容字段）\n- 对比表：替换前后能力差异\n\n请先给我计划，等我回复“开始改”后，再给出代码实现步骤并开始改文件。",
-          "source": "https://scys.com/deepsea/2001/course/164?chapterId=10597",
-          "createdAt": "2026-09-19T21:16:45.505Z",
-          "updatedAt": "2026-09-19T21:16:45.505Z"
-        },
-        {
-          "id": "p_mu8x5dlfmfzf",
-          "title": "在项目中接入指定API",
-          "desc": "帮你把外部 API 规范接入 Next.js+TS 项目，按计划逐步实现服务端调用、密钥保护与错误处理。适用于新增第三方接口联调场景。需先填齐项目背景与 API 四要素，收到\"开始改\"再动代码。",
-          "body": "你是我的全栈工程师。请帮我把下面这个 API 接入当前项目。\n\n【项目背景】\n- 技术栈：Next.js(App Router) + TypeScript\n- 当前已有功能：{填写，如果没有，就说没有}\n- 本次目标：{填写，例如\"通过调用image to image的API，实现虚拟试衣功能；用户需需要传入两张图片，一张是模特照片，一张是衣服\"}\n\n【API 四要素】\n1) API Key：{填写}\n2) 示例代码（curl）：{粘贴官方示例}\n3) 示例输入：{粘贴请求 body}\n4) 示例输出：{粘贴返回示例}\n\n【实现要求】\n1. 先输出实施计划，不要立刻改代码\n2. API Key 只能走服务端环境变量，不能暴露到前端；API Key配置到.env中\n3. 新增 service 层，不要把调用写死在页面组件\n4. 增加错误处理：401 / 429 / timeout\n5. 增加开发日志，便于排查\n6. 最后给我：\n   - 修改文件清单\n   - 本地验证步骤\n   - 失败回滚方案\n\n请先给计划，等我回复\"开始改\"后再改代码。",
-          "source": "https://scys.com/deepsea/2001/course/164?chapterId=10598",
-          "createdAt": "2026-09-19T21:48:07.827Z",
-          "updatedAt": "2026-09-19T21:48:07.827Z"
-        },
-        {
-          "id": "p_mu98sbv6bz89",
-          "title": "API报错排查",
-          "desc": "按工程排查流程定位API调用失败，输出三个最可能的根因、验证步骤、最小修复方案及验收清单，适用于接口报错时快速定位。注意事项：错误信息和日志必须贴全，否则根因会偏离；近期改动要如实填写，便于关联变更引入的回归问题；提示词明确要求先定位再改，禁止大改架构或跳过验证。",
-          "body": "我现在 API 调用失败，请按工程排查流程帮我定位。\n\n【错误信息】\n- 状态码：{填写}\n- 响应体：{粘贴}\n- 控制台日志：{粘贴}\n- 最近改动：{填写}\n\n【你需要输出】\n1. 最可能的3个根因（按概率排序）\n2. 每个根因的验证步骤\n3. 最小修复方案（不要大改架构）\n4. 修复后的验证清单（成功标准）\n\n请先定位，再给修改建议，不要直接重构。",
+          "id": "p_mt2kd6ywwcz5",
+          "title": "游戏主题站结构化信息提取与页面生成指令​",
+          "desc": "为指定游戏生成SEO友好的粉丝Wiki网站全套开发资料，含基础信息、结构化JSON、主题色和多语言方案，适用于Roblox等平台游戏的攻略站建站场景。注意：禁止输出竞对网站和404链接，数据需贴近玩家直觉且0值不写，严格按字符数限制自查。",
+          "body": "游戏词：{TOPIC}\n\n请按以下结构提供完整的网站开发信息：\n【特别注意：1.注意不要附上我的竞对的网站（官网除外）2.禁止输出任何一个404/打不开的链接】\n\n## 1、主题基础信息\n（1）给出官方网站（禁止输出任何一个404/打不开的链接）和常用社群（如Discord、reddit等）和官方 trailer youtube链接（如果没有随便选一个爆款youtube视频）。\n\n（2）搜索给出这4组用户关心的数据和SEO元数据，严格按照以下格式返回：（注意：4组用户关心的数据一定要最贴近玩家直觉，具体内容不限制，不要死板只查找Active Codes、Daily Updates、Total Visits、Units Available这4项，Players Online、 Peak CCU\"、User Reviews、Release Date·····都可以。注意：1.某项数据为0就不要写，比如：禁止写Active Codes：0 2.value的值后面不要写任何括号）\n\n  {\n    \"home\": {\n      \"meta\": {\n        \"title\": \"游戏名 Wiki — 核心关键词1, 核心关键词2\",\n        \"description\": \"SEO description（140-160字符）\"\n      },\n      \"hero\": {\n        \"eyebrow\": \"Fan-Made Community Wiki（或类似标语）\",\n        \"title\": \"游戏名\",\n        \"description\": \"游戏核心玩法介绍，2-3句，吸引玩家点击\",\n        \"stats\": [\"发布日期（如 Launched Jun 2025）\", \"最近更新日期\", \"核心数据1（如 3 Races）\", \"核心数据2（如 Lv100 Cap）\", \"核心数据3（如 130+ Skills）\"],\n        \"primaryCta\": \"Start Beginner Guide（或类似首要行动按钮）\",\n        \"secondaryCta\": \"Compare Races（或类似次要行动）\",\n        \"tertiaryCta\": \"Check Active Codes（或类似第三行动）\",\n        \"videoLabel\": \"Official media\"\n      },\n      \"start\": {\n        \"eyebrow\": \"Start Here\",\n        \"title\": \"Your 游戏名 Journey\",\n        \"cards\": [\n          {\"number\": \"1\", \"title\": \"Beginner Guide（固定：新手入门）\", \"description\": \"新手入门的完整攻略介绍。\"},\n          {\"number\": \"2\", \"title\": \"升级/刷资源/职业/Boss 等（根据游戏特点选择）\", \"description\": \"该游戏前2小时玩家最常搜的内容。\"},\n          {\"number\": \"3\", \"title\": \"与卡片2不同类型\", \"description\": \"该游戏核心玩法的教学。\"},\n          {\"number\": \"4\", \"title\": \"与卡片2/3不同类型\", \"description\": \"游戏特色机制或进阶内容。\"}\n        ]\n      },\n      \"aboutGame\": {\n        \"title\": \"What is 游戏名?\",\n        \"paragraphs\": [\n          \"游戏类型和核心玩法的2-3句介绍（如：游戏名 是一个 Roblox 上受 XX 启发的格斗 RPG...）\",\n          \"进一步说明游戏特色的2-3句（如：无论是解锁第一个 XX、进化系统、还是...）\"\n        ],\n        \"stats\": [\n          {\"label\": \"Developer\", \"value\": \"开发工作室名\"},\n          {\"label\": \"Platform\", \"value\": \"Roblox / Steam / PS5 等\"},\n          {\"label\": \"Genre\", \"value\": \"Fighting RPG 等\"},\n          {\"label\": \"Visits\", \"value\": \"12.6M+\"},\n          {\"label\": \"Favorites\", \"value\": \"243K+\"},\n          {\"label\": \"核心内容数\", \"value\": \"130+ Skills 等\"},\n          {\"label\": \"等级上限\", \"value\": \"100 等\"}\n        ],\n        \"cta\": \"Explore All Guides\"\n      },\n      \"finalCta\": {\n        \"title\": \"Ready to Master 游戏名?\",\n        \"description\": \"号召性文案（如：From your first steps in XX to endgame boss fights, our community wiki has you covered...）\",\n        \"primary\": \"Read the Beginner Guide\",\n        \"secondary\": \"Play on Roblox（或对应平台）\"\n      }\n    },\n    \"footer\": {\n      \"aboutTitle\": \"游戏名 Wiki\",\n      \"about\": \"Wiki 的简要介绍（如：游戏名 Wiki 是一个独立的粉丝攻略站，覆盖...）\",\n      \"description\": \"一句话描述游戏（如：Free XX-inspired fighting RPG on Roblox. 3 races, 130+ skills, Lv100 cap.）\",\n      \"playGame\": \"Play 游戏名（或对应平台按钮文字）\",\n      \"officialDiscord\": \"Official Discord\",\n      \"officialYoutube\": \"Official YouTube\",\n      \"communityTool\": \"社区工具名称和链接（如有，如 Skill Planner）\",\n      \"privacyPolicy\": \"Privacy Policy\",\n      \"termsOfService\": \"Terms of Service\"\n    },\n    \"metadata\": {\n      \"title\": \"游戏名 Wiki — 核心关键词1, 核心关键词2（≤60字符）\",\n      \"description\": \"简洁描述网站提供的内容和价值（140-160字符）\",\n      \"keywords\": \"游戏名, 平台, 核心关键词列表（≤100字符）\"\n    }\n  }\n\n  完成后自查：\n- home.meta.title 字符数是否 ≤ 60？\n- metadata.title 字符数是否 ≤ 60？\n- metadata.description 字符数是否在 140-160 之间？\n- metadata.keywords 字符数是否 ≤ 100？\n- home.hero.stats 数组是否为纯字符串（不含对象）？\n- home.start.cards 是否有 4 个对象？\n- home.aboutGame.stats 是否有 label+value 对？\n- footer.about 是否有 2-3 句介绍？\n- sidebarCodes 是否有 2 条兑换码？（如果没有兑换码则填\"暂无\"）\n\n## 3、网站主题色应该什么颜色？默认颜色应该选择深色还是亮色\n\n按照这种格式给我：\n/* 导航页主题色 - 亮色主题 */\n --nav-theme: 152 60% 48%;  /* green-500 (原来的 #43b176) */\n --nav-theme-light: 152 60% 58%;  /* 更浅的绿色 */\n /* 导航页主题色 - 暗色主题 */\n --nav-theme: 152 60% 48%;  /* green-500 */\n --nav-theme-light: 152 60% 58%;  /* 更浅的绿色 */\n\n## 4、多语言\n\n根据热度，分析应该支持哪几门语言（并搜索对应本地化主题名），按流量排优先级\n先说结论，按优先级排列, 最多4门语言（必须有一个是英语，中文除外）\n请以清晰的 Markdown 格式返回所有信息。",
           "source": "",
-          "createdAt": "2026-09-20T03:13:54.450Z",
-          "updatedAt": "2026-09-20T03:13:54.450Z"
+          "createdAt": "2026-08-21T06:23:58.088Z",
+          "updatedAt": "2026-08-21T06:23:58.088Z",
+          "copyCount": 2
         },
         {
-          "id": "p_mucpa1798stm",
-          "title": "Next.js 工程化复刻",
-          "desc": "用于按Section/Component拆分复刻网站UI代码，配合截图效果更佳。使用场景：前端快速复刻参考站点。注意事项：需明确技术栈，清理图片素材，便于AI准确还原布局与样式。",
-          "body": "请用Next.js/Shadcn/TailwindCSS框架复刻 {贴上要复刻的网站地址}\n按照Section/Component，尽量拆分成为更细的Component并且放到合适的目录\n\n{如果你再贴上cleanup.pictures的截图，就更好了}",
-          "source": "https://scys.com/deepsea/2001/course/164?chapterId=10853",
-          "createdAt": "2026-09-22T13:18:52.821Z",
-          "updatedAt": "2026-09-22T13:18:52.821Z"
+          "id": "p_mt2kfabb339e",
+          "title": "游戏主题站Favicon Logo 生成提示词",
+          "desc": "为游戏词生成可直接作 favicon logo 的英文绘画提示词，输出 512×512 PNG 格式。用于网站图标设计场景。注意：提示词需简洁适配方形构图，避免复杂细节与文字，确保缩略后仍清晰可辨。",
+          "body": "游戏词：{TOPIC}\n直接适合该网站的favicon logo英文绘画提示词，目标格式为：512*512 png",
+          "source": "",
+          "createdAt": "2026-08-21T06:25:35.735Z",
+          "updatedAt": "2026-08-21T06:25:35.735Z"
         },
         {
-          "id": "p_mucu3ljh8aos",
-          "title": "帮助排查本地开发报错",
-          "desc": "辅助排查 Next.js 本地开发报错，输入报错信息和最近操作即可定位原因与修法。适用于改路由、改配置后报错的场景。注意报错粘贴要完整，操作描述越具体越易定位。",
-          "body": "我在用 Next.js 本地开发，遇到了一个报错。\n报错信息如下： [粘贴报错]\n我刚才做的操作是： [描述你做了什么，比如\"修改了 app/api/chat/route.ts 里的一个函数\"]\n请帮我分析是什么原因，怎么修。",
-          "source": "https://scys.com/deepsea/2001/course/164?chapterId=10860",
-          "createdAt": "2026-09-22T15:33:50.669Z",
-          "updatedAt": "2026-09-22T15:33:50.669Z"
+          "id": "p_mt2kho7uxiyr",
+          "title": "游戏Wiki站复刻指令",
+          "desc": "用于一比一复刻指定游戏站点的网页结构与 UI 布局；适用于需要快速搭建多页面、多语言 MDX 站点时参照对标站实现首页、列表页、详情页等场景；需注意：URL 必须真实可达，应先抓取目标站页面以确保布局精准，且不应自行改动设计，应严格还原。",
+          "body": "复刻这个游戏站：[对标站首页 URL]，至少实现三个页面——\n首页：[URL]、列表 / 导航页：[URL，如 /classes]、文章详情页：[URL，如 /classes/xxx]。\nUI 布局完全参照目标站复刻，不要自行设计。\n技术栈用 Next.js + 多语言 + MDX 写内容。",
+          "source": "",
+          "createdAt": "2026-08-21T06:27:27.066Z",
+          "updatedAt": "2026-08-21T06:27:27.066Z",
+          "copyCount": 1
+        },
+        {
+          "id": "p_mt2klqakdtxr",
+          "title": "游戏Wiki站调研数据填充首页与全局替换指令​",
+          "desc": "将调研到的真实首页信息填入复刻网站，替换站名、配置模块文案、链接、SEO与主题色，并在第4关使用，避免编造、不确定则标待确认。",
+          "body": "把前面调研出的首页信息，填进复刻好的网站：\n1. 全站旧游戏名 → 替换成我的游戏名（首页、页脚、侧边栏、法律页都要换，无残留）\n2. 首页各模块（Hero / 新手引导 / 游戏介绍 / 兑换码 / 底部号召）用调研的真实文案\n3. 官方链接（官网 / Discord / YouTube）、SEO title / description / keywords、主题色（HSL）、多语言，按调研结果配置\n4. 侧边栏兑换码用调研的真实码；没有就写\"暂无\"，绝不编造\n所有内容只写第 4 关调研的真实信息，不确定的标\"待确认\"，不要编造数值和兑换码。",
+          "source": "",
+          "createdAt": "2026-08-21T06:30:36.381Z",
+          "updatedAt": "2026-08-21T06:31:50.813Z",
+          "copyCount": 1
+        },
+        {
+          "id": "p_mt2ko1f4ip1b",
+          "title": "游戏Wiki站内页SEO内容生成指令",
+          "desc": "用于游戏内页SEO内容生成，按关键词整合多源素材产出1200字页面。适用批量产出游戏攻略/资讯内页。注意：title与meta需含关键词且控字数，模糊信息标\"待确认\"，禁止编造数值、角色名或兑换码，仅用已收集的真实数据。",
+          "body": "针对内页关键词，把收集到的信息过滤无效信息，整合收集的多源数据，然后填进各个内页。\n一个关键词填一个内页，输入如下：\n- 游戏关键词：keywords.json\n- 为这个关键词收集到的真实信息（第 4 关调研的素材，贴在这里）：关键词素材.md\n要求：\n1. 页面 title 含这个关键词，40-60字符；meta description 含关键词、140-160 字符\n2. 开头直接回答玩家的搜索问题，不绕弯\n3. 全文1200字左右；分 H2 小节，每段 3-4 句，适合扫读；\n4. 只写上面收集到的真实信息，不确定的标\"待确认\"\n5. 不要编造数值、角色名、兑换码；",
+          "source": "",
+          "createdAt": "2026-08-21T06:32:24.112Z",
+          "updatedAt": "2026-08-21T06:32:24.112Z",
+          "copyCount": 1
         }
       ]
     }
